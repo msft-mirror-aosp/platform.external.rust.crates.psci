@@ -1,0 +1,20 @@
+name: "psci"
+description: "Functions and constants for the Arm Power State Coordination Interface (PSCI) 1.1 on aarch64."
+third_party {
+  url {
+    type: HOMEPAGE
+    value: "https://crates.io/crates/psci"
+  }
+  url {
+    type: ARCHIVE
+    value: "https://static.crates.io/crates/psci/psci-0.1.0.crate"
+  }
+  version: "0.1.0"
+  # Dual-licensed, using the least restrictive per go/thirdpartylicenses#same.
+  license_type: NOTICE
+  last_upgrade_date {
+    year: 2022
+    month: 4
+    day: 7
+  }
+}
