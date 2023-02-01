@@ -12,11 +12,21 @@
 [package]
 edition = "2021"
 name = "psci"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Andrew Walbran <qwandor@google.com>"]
 description = "Functions and constants for the Arm Power State Coordination Interface (PSCI) 1.1 on aarch64."
-keywords = ["arm", "aarch64", "cortex-a", "psci"]
-categories = ["embedded", "no-std", "hardware-support"]
+readme = "README.md"
+keywords = [
+    "arm",
+    "aarch64",
+    "cortex-a",
+    "psci",
+]
+categories = [
+    "embedded",
+    "no-std",
+    "hardware-support",
+]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/google/psci"
 resolver = "2"
