@@ -4,9 +4,12 @@
 
 //! Functions to make PSCI calls.
 
-use crate::error::{success_or_error_32, success_or_error_64, Error};
-use crate::smccc::{call32, call64};
 use crate::{
+    error::Error,
+    smccc::{
+        call32, call64,
+        error::{positive_or_error_32, success_or_error_32, success_or_error_64},
+    },
     AffinityState, LowestAffinityLevel, MigrateType, PowerState, SuspendMode,
     PSCI_AFFINITY_INFO_64, PSCI_CPU_DEFAULT_SUSPEND_64, PSCI_CPU_FREEZE, PSCI_CPU_OFF,
     PSCI_CPU_ON_64, PSCI_CPU_SUSPEND_64, PSCI_FEATURES, PSCI_MEM_PROTECT,
@@ -18,7 +21,7 @@ use crate::{
 
 /// Returns the version of PSCI implemented.
 pub fn version() -> u32 {
-    call32(PSCI_VERSION, [0, 0, 0, 0, 0, 0, 0])[0]
+    call32(PSCI_VERSION, [0; 7])[0]
 }
 
 /// Suspends execution of a core or topology node.
@@ -55,7 +58,7 @@ pub fn cpu_suspend(
 
 /// Powers down the current core.
 pub fn cpu_off() -> Result<(), Error> {
-    success_or_error_32(call32(PSCI_CPU_OFF, [0, 0, 0, 0, 0, 0, 0])[0])
+    success_or_error_32(call32(PSCI_CPU_OFF, [0; 7])[0])
 }
 
 /// Powers up a core.
@@ -128,25 +131,22 @@ pub fn migrate(target_cpu: u64) -> Result<(), Error> {
 
 /// Identifies the levelof multicore support in the Trusted OS.
 pub fn migrate_info_type() -> Result<MigrateType, Error> {
-    (call32(PSCI_MIGRATE_INFO_TYPE, [0, 0, 0, 0, 0, 0, 0])[0] as i32).try_into()
+    (call32(PSCI_MIGRATE_INFO_TYPE, [0; 7])[0] as i32).try_into()
 }
 
 /// Returns the MPIDR value of the current resident core of the Trusted OS.
 pub fn migrate_info_up_cpu() -> u64 {
-    call64(
-        PSCI_MIGRATE_INFO_UP_CPU_64,
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    )[0]
+    call64(PSCI_MIGRATE_INFO_UP_CPU_64, [0; 17])[0]
 }
 
 /// Shuts down the system.
 pub fn system_off() -> Result<(), Error> {
-    success_or_error_32(call32(PSCI_SYSTEM_OFF, [0, 0, 0, 0, 0, 0, 0])[0])
+    success_or_error_32(call32(PSCI_SYSTEM_OFF, [0; 7])[0])
 }
 
 /// Resets the system.
 pub fn system_reset() -> Result<(), Error> {
-    success_or_error_32(call32(PSCI_SYSTEM_RESET, [0, 0, 0, 0, 0, 0, 0])[0])
+    success_or_error_32(call32(PSCI_SYSTEM_RESET, [0; 7])[0])
 }
 
 /// Resets the system in an architectural or vendor-specific way.
@@ -199,17 +199,12 @@ pub fn mem_protect_check_range(base: u64, length: u64) -> Result<(), Error> {
 /// Queries whether `SMCCC_VERSION` or a specific PSCI function is implemented, and what features
 /// are supported.
 pub fn psci_features(psci_function_id: u32) -> Result<u32, Error> {
-    let result = call32(PSCI_FEATURES, [psci_function_id, 0, 0, 0, 0, 0, 0])[0] as i32;
-    if result >= 0 {
-        Ok(result as u32)
-    } else {
-        Err(result.into())
-    }
+    positive_or_error_32(call32(PSCI_FEATURES, [psci_function_id, 0, 0, 0, 0, 0, 0])[0])
 }
 
 /// Puts the current core into an implementation-defined low power state.
 pub fn cpu_freeze() -> Result<(), Error> {
-    success_or_error_32(call32(PSCI_CPU_FREEZE, [0, 0, 0, 0, 0, 0, 0])[0])
+    success_or_error_32(call32(PSCI_CPU_FREEZE, [0; 7])[0])
 }
 
 /// Puts the current core into an implementation-defined low power state.
