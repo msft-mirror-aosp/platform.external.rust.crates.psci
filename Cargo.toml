@@ -12,9 +12,9 @@
 [package]
 edition = "2021"
 name = "psci"
-version = "0.1.1"
+version = "0.1.3"
 authors = ["Andrew Walbran <qwandor@google.com>"]
-description = "Functions and constants for the Arm Power State Coordination Interface (PSCI) 1.1 on aarch64."
+description = "Functions and constants for the Arm SMC Calling Convention (SMCCC) 1.4 and Arm Power State Coordination Interface (PSCI) 1.1 on aarch64."
 readme = "README.md"
 keywords = [
     "arm",
@@ -29,7 +29,6 @@ categories = [
 ]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/google/psci"
-resolver = "2"
 
 [dependencies]
 
